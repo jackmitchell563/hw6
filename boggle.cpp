@@ -95,5 +95,16 @@ bool boggleHelper(const std::set<std::string>& dict, const std::set<std::string>
 								   std::string word, std::set<std::string>& result, unsigned int r, unsigned int c, int dr, int dc)
 {
 //add your solution here!
-
+  if(r >= board.size() or c >= board.size()) return false; // current word invalid
+  word.push_back(board[r][c]); // make change to current state
+  if(prefix.find(word) == prefix.end() and dict.find(word) == dict.end()) return false; // backtrack
+  if(!boggleHelper(dict, prefix, board, word, result, r + dr, c + dc, dr, dc) and dict.find(word) != dict.end()){
+    // next word invalid and current word in dict; largest word possible
+    result.insert(word);
+    return true;
+  } else if(boggleHelper(dict, prefix, board, word, result, r + dr, c + dc, dr, dc) and dict.find(word) != dict.end()){
+    // next word valid and current word in dict, so make sure previous call doesn't add to dict (since one of the later calls is the longest word)
+    return true;
+  }
+  return false;
 }
