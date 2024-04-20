@@ -307,7 +307,7 @@ HashTable<K,V,Prober,Hash,KEqual>::HashTable(
 template<typename K, typename V, typename Prober, typename Hash, typename KEqual>
 HashTable<K,V,Prober,Hash,KEqual>::~HashTable()
 {
-  for(int i = size() - 1; i >= 0; i--){
+  for(int i = 0; i < table_.size(); i++){
     if(table_[i]) delete table_[i];
     // table_.pop_back();
     // std::cout << i << std::endl;
