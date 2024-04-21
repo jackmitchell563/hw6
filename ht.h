@@ -309,6 +309,7 @@ HashTable<K,V,Prober,Hash,KEqual>::~HashTable()
 {
   for(int i = 0; i < table_.size(); i++){
     if(table_[i]) delete table_[i];
+    table_[i] = nullptr;
     // table_.pop_back();
     // std::cout << i << std::endl;
   }
@@ -345,6 +346,7 @@ void HashTable<K,V,Prober,Hash,KEqual>::insert(const ItemType& p)
   if(npos == loc) throw std::logic_error("couldn't insert");
   else if(table_[loc] and table_[loc]->deleted == false){ // already exists
     table_[loc]->item.second = p.second;
+    return;
   }
   HashItem* newitem = new HashItem(p);
   table_[loc] = newitem;
@@ -452,9 +454,9 @@ void HashTable<K,V,Prober,Hash,KEqual>::resize()
             p.first = oldtable[i]->item.first;
             p.second = oldtable[i]->item.second;
             insert(p);
-        } else if(oldtable[i] and oldtable[i]->deleted == true){
-            delete oldtable[i];
         }
+        if(oldtable[i]) delete oldtable[i];
+        oldtable[i] = nullptr;
     }
     // std::cout << size() << std::endl;
     // items_ = 0;
